@@ -4,6 +4,13 @@
 
 This project is in development.
 
+## Branches
+
+| Branch name          | Description                                |
+|----------------------|--------------------------------------------|
+| `master`             | Main branch                                |
+| `tecc/nahw`          | tecc's Not At Home Work (NAHW)             |
+
 ## Licence
 
 RFCs is licensed under `LGPL-2.1-or-later`, or `LicenseRef-KDE-Accepted-LGPL`. See the [licensing policy](https://community.kde.org/Policies/Licensing_Policy) for more information.
