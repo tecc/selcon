@@ -5,6 +5,7 @@ import { dataFile, isNull } from "@/util";
 import fs from "fs";
 import { walkDirectory } from "@/util/fs";
 import Log from "@/log";
+import * as minify from "@/util/minify";
 
 function dataDir(): string {
     const path = dataFile("webscript");
@@ -50,7 +51,10 @@ export function init(): void {
     (webscriptState as Selcon.InitialisedWebscriptState).initialised = true;
 }
 
-export function compileFiles(files: string[]): void {
+export interface CompileOptions {
+    minify: boolean
+}
+export function compileFiles(files: string[], options: CompileOptions): void {
     if (!webscriptState.initialised) {
         throw new Error("Initialised");
     }
@@ -80,7 +84,7 @@ export function generateAssignScript(modules: string[]): string {
     return str;
 }
 
-export function bundleModules(modules: string[]): Promise<void> {
+export function bundleModules(modules: string[], options: CompileOptions): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         Log.debug("Bundling modules");
         const bundle = browserify({
@@ -102,18 +106,33 @@ export function bundleModules(modules: string[]): Promise<void> {
 
             const as = generateAssignScript(modules);
             const total = `${data.toString("utf-8")}\n${as}`;
-            fs.writeFile(SCRIPT_OUTPUT, total, "utf-8", (err) => {
-                if (!isNull(err)) {
-                    reject(err);
-                    return;
-                }
-                resolve();
-            });
+            let complete: Promise<string>;
+            if (options.minify) {
+                complete = minify.js(total, {
+                    preservedNames: ['init']
+                });
+            } else {
+                complete = (async () => total)();
+            }
+            complete
+                .then((completed) => {
+                    fs.writeFile(SCRIPT_OUTPUT, completed, "utf-8", (err) => {
+                        if (!isNull(err)) {
+                            reject(err);
+                            return;
+                        }
+                        resolve();
+                    });
+                })
         });
     });
 }
 
-export function compile(): Promise<string> {
+export const DEFAULT_COMPILE_OPTIONS: CompileOptions = {
+    minify: false
+}
+export function compile(optionsPart: Partial<CompileOptions>): Promise<string> {
+    const options = Object.assign({}, DEFAULT_COMPILE_OPTIONS, optionsPart);
     init();
     return new Promise<string>((resolve, reject) => {
         if (!webscriptState.initialised) {
@@ -131,8 +150,8 @@ export function compile(): Promise<string> {
             filter: (v) => path.extname(v) === ".ts",
             mapBeforeFilter: false
         });
-        compileFiles(files);
-        bundleModules(files.map((v) => path.resolve(SCRIPT_OUTPUT_DIR, path.filename(v) + ".js")))
+        compileFiles(files, options);
+        bundleModules(files.map((v) => path.resolve(SCRIPT_OUTPUT_DIR, path.filename(v) + ".js")), options)
             .then(() => {
                 if (!webscriptState.compiled) {
                     Log.error("Webscript is not compiled");

@@ -1,4 +1,5 @@
 declare interface Information {
+    template: string;
     name: string;
     nickname?: string;
     author: {
@@ -46,10 +47,6 @@ declare namespace Selcon {
          * Whether or not debug (DBG) logs should be enabled.
          */
         verbose: boolean;
-        /**
-         * Whether or not to enable debug features for produced outputs.
-         */
-        debug: boolean;
     }
 }
 declare const webscriptState: Selcon.WebscriptState;

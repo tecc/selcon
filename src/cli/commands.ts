@@ -5,7 +5,7 @@ import arg from "arg";
 import options from "@/cli/options";
 
 export interface Command<T = unknown> {
-    run(args: T): Promise<void>;
+    run(args: CommandArgs<T>): Promise<void>;
     options(): arg.Spec;
 }
 
@@ -21,12 +21,11 @@ export function findAllCommands(): string[] {
     });
 }
 
-export type ArgResult = arg.Result<typeof options>;
-export interface CommandArgs extends ArgResult {}
+export type CommandArgs<T> = arg.Result<(typeof options) & T>;
 
 export interface ImportedCommand<T = unknown> {
     run: (args: T) => (void | Promise<void>)
-    options?: () => arg.Spec;
+    options?: arg.Spec | (() => arg.Spec);
 }
 
 const cached: Record<string, Command> = {};
@@ -48,11 +47,17 @@ export async function loadCommand(name: string, force = false): Promise<Command>
             else return Promise.resolve(value);
         },
         options(): arg.Spec {
-            if ((typeof imported.options) === "function") {
-                return imported.options!();
-            } else {
+            if (!imported.options) {
                 return {};
             }
+            const type = typeof imported.options;
+            if (type === "function") {
+                return (imported.options as () => arg.Spec)();
+            }
+            if (type === "object") {
+                return imported.options as arg.Spec;
+            }
+            return {};
         }
     };
     return cached[name];

@@ -3,8 +3,7 @@ node_modules/
 .yarn/
 
 # Build outputs
-rfcs/*/*.html
-!rfcs/*/*.in.html
+*.out.*
 .selcon/
 dist/
 _site/

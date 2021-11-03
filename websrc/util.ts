@@ -23,7 +23,7 @@ export function assignId(el: HTMLElement): number {
     return id;
 }
 export function getPage(el: HTMLElement | null): number | null {
-    if (!isNull(el)) return null;
+    if (isNull(el)) return null;
     el = el!;
     if (typeof el.dataset[Data.Page] !== "string") {
         const page = getPage(el.parentElement);

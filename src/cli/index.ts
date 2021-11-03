@@ -32,7 +32,6 @@ declareGlobal<Selcon.WebscriptState>("webscriptState", {
     initialised: false
 });
 declareGlobal<Selcon.Options>("selconOptions", {
-    debug: true,
     verbose: false,
     command: "help"
 });
@@ -69,7 +68,7 @@ async function cli() {
     const cmd = await loadCommand(command);
     const cmdOptSpec = cmd.options();
     const optSpec = Object.assign<Record<string, never>, arg.Spec, typeof options>({}, cmdOptSpec, options);
-    const args: CommandArgs = arg(optSpec);
+    const args: CommandArgs<unknown> = arg(optSpec);
     const verbose = !!args["--verbose"];
     if (verbose) {
         selconOptions.verbose = verbose;

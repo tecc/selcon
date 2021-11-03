@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+        <style>
+        {{> include paths="./styles/rfc.css" }}
+        </style>
+        <style>
+            #info {
+                background-color: #5006c7;
+                display: flex;
+                justify-content: space-between;
+            }
+            .eqspace {
+                display: flex;
+                justify-content: space-between;
+            }
+            .space-1 > *:not(:first-child) {
+                padding-left: .3cm;
+            }
+        </style>
+        <style>
+            .index-link {
+                cursor: pointer;
+            }
+            .preset-header {
+                background-color: #5006c7;
+                display: flex;
+                justify-content: space-between;
+                padding: 1cm;
+            }
+        </style>
+        <script>
+            {{{SCRIPT}}}
+        </script>
+    </head>
+    <body onload="init()">
+        <div class="page" data-page="1">
+            <div id="info" class="light">
+                <div>
+                    <div id="name" class="montserrat">
+                        <div id="info-qi-name" class="fs-1 fst-bold">
+                            {{page.name}}
+                        </div>
+                        <div class="eqspace space-1">
+                            <div id="info-qi-type">
+                                {{page.type}}
+                            </div>
+                            <div>
+                                Revision <span id="info-qi-revision">{{page.revision}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tags">
+                        <span>
+                            <ul class="singleline nostyle">
+                                <li>Last update <span class="fst-bold">todo</span></li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <table id="info-data" class="vert">
+                    </table>
+                </div>
+            </div>
+            <div id="index" data-root data-name="Index">
+                <div class="fs-1">Index</div>
+                <div id="index-id">
+                </div>
+            </div>
+        </div>
+        {{{CONTENT}}}
+    </body>
+</html>

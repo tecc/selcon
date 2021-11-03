@@ -44,12 +44,12 @@ function indexEl(name: string, el: HTMLElement, children: HTMLElement[] | NodeLi
     // children
     const childrenEl = document.createElement("ul");
     children.forEach((el) => {
-        parent.appendChild(indexEl(el.dataset[Data.Name]!, el, el.querySelectorAll(`*[data-${Data.Name}]`)));
+        childrenEl.appendChild(indexEl(el.dataset[Data.Name]!, el, el.querySelectorAll(`*[data-${Data.Name}]`)));
     });
     parent.appendChild(childrenEl);
     return parent;
 }
-function rfcIndex() {
+function index() {
     // index
     const container = document.getElementById(INDEX_ID);
     if (container == null) {
@@ -72,10 +72,10 @@ const Presets: Record<string, HTMLApplier> = {
         {
             const nameEl = document.createElement("div");
             nameEl.classList.add("montserrat", "fst-bold");
-            nameEl.innerHTML = "Krita Extension Manager";
+            nameEl.innerHTML = Info.name;
             el.appendChild(nameEl);
             const nicknameEl = document.createElement("span");
-            nicknameEl.innerHTML = "&nbsp;Kritex";
+            nicknameEl.innerHTML = "&nbsp;" + Info.nickname;
             nicknameEl.classList.add("fst-norm", "fst-italic");
             nameEl.appendChild(nicknameEl);
         }
@@ -86,7 +86,7 @@ const Presets: Record<string, HTMLApplier> = {
         }
     }
 };
-function rfcInitPresets() {
+function initPresets() {
     const elements = document.querySelectorAll<HTMLElement>(`*[data-${Data.Preset}]`);
     elements.forEach((el) => {
         const preset = el.dataset[Data.Preset];
@@ -101,7 +101,7 @@ function rfcInitPresets() {
     });
 }
 // first page header
-function rfcFirstPageHeader() {
+function firstPageHeader() {
     // quickinfo
     {
         const values: Record<string, string> = {
@@ -187,8 +187,8 @@ function rfcFirstPageHeader() {
 
 }
 // init
-export function rfcInit() {
-    rfcInitPresets();
-    rfcFirstPageHeader();
-    rfcIndex();
+export function init() {
+    initPresets();
+    firstPageHeader();
+    index();
 }

@@ -5,17 +5,25 @@ import Log from "@/log";
 import Handlebars from "handlebars";
 import { isNull, toDisplayString, DisplayStringInputType } from "@/util";
 import { walkDirectory } from "@/util/fs";
+import * as minify from '@/util/minify';
 
 export interface RenderOptions {
     path: string;
+    minify: boolean;
+    forceTemplate: boolean;
 }
 
 export type RenderContext = Information & {
     SCRIPT: string,
     CONTENT: string
 }
-
-export function render(data: string, template: Handlebars.TemplateDelegate<RenderContext>, options: RenderOptions) {
+export const DEFAULT_RENDER_OPTIONS: RenderOptions = {
+    minify: false,
+    forceTemplate: false,
+    path: ''
+};
+export function render(data: string, template: Handlebars.TemplateDelegate<RenderContext>, optionsPart: Partial<RenderOptions>) {
+    const options = Object.assign({}, DEFAULT_RENDER_OPTIONS, optionsPart);
     if (isNull(template)) {
         Log.warn("Template is null, returning empty string");
         return "";
@@ -23,6 +31,15 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
     const matter = fm<Information>(data);
 
     const m = matter.attributes;
+    if (m.template) {
+        const newTemplate = getTemplate(m.template);
+        if (!newTemplate) {
+            Log.warn("Input specifies different template '" + m.template + "', but it does not exist. Using provided template.")
+        } else {
+            template = newTemplate;
+            Log.debug("Using different template '" + m.template + "' instead of provided.")
+        }
+    }
     const script = `
     const Info = JSON.parse(\`${JSON.stringify(m)}\`);
     ${SCRIPT_CONTENTS || ""}
@@ -31,7 +48,8 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
     const ctx: RenderContext = <RenderContext>Object.assign({},
         matter.attributes,
         {
-            "SCRIPT": script
+            "SCRIPT": script,
+            "CONTENT": matter.body
         }
     );
     const rendered = template(ctx, {
@@ -70,6 +88,7 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
             }
         }
     });
+    Log.debug("Rendered input");
     return rendered;
 }
 
@@ -79,9 +98,14 @@ export function setScript(script: string) {
     // console.log("Script", script);
 }
 
+export interface BuildOptions {
+    template: string,
+    minify: boolean
+}
+export const DEFAULT_BUILD_OPTIONS: BuildOptions = { template: "default", minify: true };
 
-
-export function buildFile(file: string, template: string): Promise<void> {
+export function buildFile(file: string, optionsPart: Partial<BuildOptions> = {}): Promise<void> {
+    const options = Object.assign({}, DEFAULT_BUILD_OPTIONS, optionsPart);
     return new Promise<void>((resolve, reject) => {
         fs.readFile(file, "utf-8", (err, data) => {
             if (err) {
@@ -90,24 +114,46 @@ export function buildFile(file: string, template: string): Promise<void> {
                 return;
             }
 
-            const rendered = render(data, getTemplate(template)!, {
-                path: file
+            const rendered = render(data, getTemplate(options.template)!, {
+                path: file,
+                minify: options.minify
             });
 
-            const parts = file.split(".");
-            const filename = parts.slice(0, parts.length - 2).join("");
-            const outputPath = path.resolve(path.dirname(file), `${filename}.html`);
-            Log.debug(`Wrote rendered result of ${file} to ${outputPath}`);
-            fs.writeFile(outputPath, rendered, "utf-8", (err) => {
-                if (err) {
-                    Log.error("Couldn't write to file");
+
+            let completed: Promise<string>;
+            if (options.minify) {
+                completed = minify.html(rendered);
+            } else {
+                completed = (async () => {
+                    return rendered;
+                })();
+            }
+            completed
+                .then((completed) => {
+                    // NOTE(tecc): this is bad, i know, but idc
+                    let parts = file.split(".");
+                    const extra = parts.slice(0, parts.length - 1);
+                    extra.push("out", ...(parts.slice(parts.length - 1)));
+                    const filename = extra.join('.');
+
+                    const outputPath = path.resolve(path.dirname(file), `${filename}`);
+                    fs.writeFile(outputPath, completed, "utf-8", (err) => {
+                        if (err) {
+                            Log.error("Couldn't write to file");
+                            reject(err);
+                            return;
+                        }
+                        Log.debug(`Wrote rendered result of ${file} to ${outputPath}`);
+                        resolve();
+                        return;
+                    });
+                })
+                .catch((err) => {
+                    Log.error("Couldn't complete");
                     reject(err);
+
                     return;
-                }
-                Log.debug("Wrote output");
-                resolve();
-                return;
-            });
+                })
 
             return;
         });
