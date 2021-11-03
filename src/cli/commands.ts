@@ -2,6 +2,7 @@ import * as path from "@/util/path";
 import * as fs from "@/util/fs";
 import Log from "@/log";
 import arg from "arg";
+import options from "@/cli/options";
 
 export interface Command<T = unknown> {
     run(args: T): Promise<void>;
@@ -19,6 +20,9 @@ export function findAllCommands(): string[] {
         mapBeforeFilter: false
     });
 }
+
+export type ArgResult = arg.Result<typeof options>;
+export interface CommandArgs extends ArgResult {}
 
 export interface ImportedCommand<T = unknown> {
     run: (args: T) => (void | Promise<void>)

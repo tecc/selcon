@@ -24,7 +24,8 @@ if (tsconfig.resultType === "failed") {
 import Log from "@/log";
 import { declareGlobal, isNull, toDisplayString } from "@/util";
 import arg from "arg";
-import { findAllCommands, loadCommand } from "@/cli/commands";
+import { CommandArgs, findAllCommands, loadCommand } from "@/cli/commands";
+import options from "@/cli/options";
 
 declareGlobal<string>("packageDir", pkgdir.sync()!);
 declareGlobal<Selcon.WebscriptState>("webscriptState", {
@@ -39,11 +40,6 @@ declareGlobal<Selcon.Options>("selconOptions", {
 let commands: string[];
 function initialiseCli() {
     commands = findAllCommands();
-}
-
-interface GlobalOptions extends arg.Spec {
-    "--verbose": arg.Handler<boolean>;
-    "-v": "--verbose";
 }
 
 async function cli() {
@@ -72,13 +68,14 @@ async function cli() {
     Log.debug(`Executing command '${command}'`);
     const cmd = await loadCommand(command);
     const cmdOptSpec = cmd.options();
-    const optSpec = Object.assign<Record<string, never>, arg.Spec, GlobalOptions>({}, cmdOptSpec, {
-        "--verbose": Boolean,
-        "-v": "--verbose",
-    });
-    const args = arg(optSpec);
+    const optSpec = Object.assign<Record<string, never>, arg.Spec, typeof options>({}, cmdOptSpec, options);
+    const args: CommandArgs = arg(optSpec);
     const verbose = !!args["--verbose"];
-    selconOptions.verbose = verbose;
+    if (verbose) {
+        selconOptions.verbose = verbose;
+        Log.debug("Enabling verbose log output");
+    }
+    args._ = args._.slice(1);
     await cmd.run(args);
 }
 
