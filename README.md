@@ -6,10 +6,7 @@ This project is in development.
 
 ## Branches
 
-| Branch name          | Description                                |
-|----------------------|--------------------------------------------|
-| `master`             | Main branch                                |
-| `tecc/nahw`          | tecc's Not At Home Work (NAHW)             |
+The master branch `master` is the development branch.
 
 ## Licence
 
