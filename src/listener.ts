@@ -4,5 +4,5 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-KDE-Accepted-LGPL
  */
 
-import fs from 'fs';
+import fs from "fs";
 

@@ -1,23 +1,37 @@
 {
-  "name": "request-for-comments",
-  "version": "0.0.0",
-  "main": "render.js",
-  "repository": "https://invent.kde.org/tecc/rfcs",
-  "author": "tecc",
-  "license": "MIT",
-  "scripts": {
-    "prebuild": "rm -rf dist",
-    "build": "tsc"
-  },
-  "dependencies": {
-    "arg": "^5.0.1",
-    "front-matter": "^4.0.2",
-    "pkg-dir": "^5.0.0",
-    "typescript": "^4.4.3",
-    "walk-sync": "^3.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^16.9.1",
-    "@types/pkg-dir": "^2.0.1"
-  }
+    "name": "request-for-comments",
+    "version": "0.0.0",
+    "main": "render.js",
+    "repository": "https://invent.kde.org/tecc/rfcs",
+    "author": "tecc",
+    "license": "MIT",
+    "scripts": {
+        "prestart": "yarn build",
+        "start": "node dist/cli/index.js",
+        "prebuild": "rm -rf dist",
+        "build": "tsc",
+        "lint": "\"$(yarn bin)/eslint\" src/*"
+    },
+    "dependencies": {
+        "arg": "^5.0.1",
+        "browserify": "^17.0.0",
+        "front-matter": "^4.0.2",
+        "handlebars": "^4.7.7",
+        "luxon": "^2.0.2",
+        "pkg-dir": "^5.0.0",
+        "synchronized-promise": "^0.3.1",
+        "tsconfig-paths": "^3.11.0",
+        "typescript": "^4.4.3",
+        "walk-sync": "^3.0.0"
+    },
+    "devDependencies": {
+        "@types/browserify": "^12.0.37",
+        "@types/eslint": "^7.28.0",
+        "@types/luxon": "^2.0.4",
+        "@types/node": "^16.9.1",
+        "@types/pkg-dir": "^2.0.1",
+        "@typescript-eslint/eslint-plugin": "^4.31.1",
+        "@typescript-eslint/parser": "^4.31.1",
+        "eslint": "^7.32.0"
+    }
 }
