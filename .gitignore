@@ -1,0 +1,14 @@
+# Node
+node_modules/
+
+# Build outputs
+rfcs/*/*.html
+!rfcs/*/*.in.html
+.selcon/
+dist/
+
+# IDEs & development tools
+# - IntelliJ-based
+.idea/
+# - Visual Studio Code
+.vscode/
