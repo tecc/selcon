@@ -2,24 +2,24 @@
     "name": "selcon",
     "description": "Self-contained markup compiler",
     "version": "1.0.0",
-    "main": "dist/cli/index.js",
     "repository": "https://github.com/tecc/selcon",
     "author": "tecc",
     "license": "MIT",
     "bugs": {
-        "url" : "https://github.com/tecc/selcon/issues",
-        "email" : "tecc@tecc.me"
+        "url": "https://github.com/tecc/selcon/issues",
+        "email": "tecc@tecc.me"
     },
-    "browser": false,
+    "browser": {},
     "bin": "./dist/cli/index.js",
     "scripts": {
         "prestart": "yarn build",
         "start": "node dist/cli/index.js",
         "prebuild": "rm -rf dist",
-        "build": "\"$(yarn bin)/tsc\"",
-        "lint": "\"$(yarn bin)/eslint\" src/*",
-        "prepublish": "yarn lint && yarn build",
-        "preinstall": "yarn build"
+        "build": "tsc",
+        "lint": "eslint src/*",
+        "test": "npm run lint",
+        "prepublish": "npm run test",
+        "prepack": "npm run build"
     },
     "dependencies": {
         "arg": "^5.0.1",
@@ -42,5 +42,10 @@
         "@typescript-eslint/eslint-plugin": "^4.31.1",
         "@typescript-eslint/parser": "^4.31.1",
         "eslint": "^7.32.0"
-    }
+    },
+    "files": [
+        "dist/**/*",
+        "websrc/**/*",
+        "templates/**/*"
+    ]
 }

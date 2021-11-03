@@ -1,11 +1,13 @@
 # Node
 node_modules/
+.yarn/
 
 # Build outputs
 rfcs/*/*.html
 !rfcs/*/*.in.html
 .selcon/
 dist/
+_site/
 
 # IDEs & development tools
 # - IntelliJ-based
