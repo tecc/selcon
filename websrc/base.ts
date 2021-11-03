@@ -1,11 +1,5 @@
-/*
- * SPDX-FileCopyrightText: 2021 Cae Lundin <tecc@tecc.me>
- *
- * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-KDE-Accepted-LGPL
- */
-
-import { assignId, getPage, isNull, scrollTo } from './util';
-import Data from './data';
+import { assignId, getPage, isNull, scrollTo } from "./util";
+import Data from "./data";
 
 declare const RFC: {
     name: string;
@@ -49,22 +43,22 @@ function indexEl(name: string, el: HTMLElement, children: HTMLElement[] | NodeLi
     // children
     const childrenEl = document.createElement("ul");
     children.forEach((el) => {
-        parent.appendChild(indexEl(el.dataset[Data.Name]!!, el, el.querySelectorAll(`*[data-${Data.Name}]`)));
+        parent.appendChild(indexEl(el.dataset[Data.Name]!, el, el.querySelectorAll(`*[data-${Data.Name}]`)));
     });
     parent.appendChild(childrenEl);
-    return parent
+    return parent;
 }
 function rfcIndex() {
     // index
     const container = document.getElementById(INDEX_ID);
     if (container == null) {
-        console.error('Index element does not exist');
+        console.error("Index element does not exist");
         return;
     }
     const elements = document.querySelectorAll<HTMLElement>(`*[data-${Data.IsRootElement}]`);
     const parent = document.createElement("ul");
     elements.forEach((el) => {
-        parent.appendChild(indexEl(el.dataset[Data.Name]!!, el, el.querySelectorAll(`*[data-${Data.Name}]`)));
+        parent.appendChild(indexEl(el.dataset[Data.Name]!, el, el.querySelectorAll(`*[data-${Data.Name}]`)));
     });
     container.appendChild(parent);
 }
@@ -110,8 +104,8 @@ function rfcFirstPageHeader() {
     // quickinfo
     {
         const values: Record<string, string> = {
-            'name': isNull(RFC.nickname) ? RFC.name : RFC.nickname!!,
-            'type': RFC.type
+            "name": isNull(RFC.nickname) ? RFC.name : RFC.nickname!,
+            "type": RFC.type
         };
         for (const key of Object.keys(values)) {
             const value = values[key];
@@ -120,52 +114,52 @@ function rfcFirstPageHeader() {
                 console.warn(`QuickInfo element ${qiEl} does not exist`);
                 continue;
             }
-            qiEl!!.innerHTML = value;
+            qiEl!.innerHTML = value;
         }
     }
 
     // data
     {
-        const dataTableEl = document.getElementById('info-data');
+        const dataTableEl = document.getElementById("info-data");
         if (isNull(dataTableEl)) {
-            console.error('Data table element is null');
+            console.error("Data table element is null");
         } else {
             const values: Record<string, HTMLApplier | null> = {
-                'Author': !isNull(RFC.author) ? (el: HTMLElement) => {
+                "Author": !isNull(RFC.author) ? (el: HTMLElement) => {
                     if (!RFC.author.name) {
                         el.innerHTML = "[Undefined]";
                         return;
                     }
 
-                    const type = isNull(RFC.author.link) ? 'span' : 'a';
+                    const type = isNull(RFC.author.link) ? "span" : "a";
                     const nameEl = document.createElement(type);
                     nameEl.innerHTML = RFC.author.name;
-                    nameEl.classList.add('mono');
-                    if (type === 'a') {
-                        nameEl.setAttribute('href', RFC.author.link);
+                    nameEl.classList.add("mono");
+                    if (type === "a") {
+                        nameEl.setAttribute("href", RFC.author.link);
                     }
                     el.appendChild(nameEl);
                 } : null,
-                'Formal name': isNull(RFC.nickname) ? null : (el) => {
+                "Formal name": isNull(RFC.nickname) ? null : (el) => {
                     el.innerHTML = RFC.name;
                 },
-                'Repository': isNull(RFC.repository) ? null : (el) => {
-                    const linkEl = document.createElement('a');
-                    linkEl.setAttribute('href', RFC.repository.link);
-                    linkEl.classList.add('mono');
+                "Repository": isNull(RFC.repository) ? null : (el) => {
+                    const linkEl = document.createElement("a");
+                    linkEl.setAttribute("href", RFC.repository.link);
+                    linkEl.classList.add("mono");
                     linkEl.innerHTML = RFC.repository.name;
 
                     el.appendChild(linkEl);
                     if (!isNull(RFC.repository.branch)) {
-                        const branchEl = document.createElement('span');
-                        branchEl.innerHTML = `&nbsp;branch&nbsp;`;
+                        const branchEl = document.createElement("span");
+                        branchEl.innerHTML = "&nbsp;branch&nbsp;";
 
-                        const branchNameEl = document.createElement('span');
-                        branchNameEl.innerHTML = RFC.repository.branch!!;
-                        branchNameEl.classList.add('mono');
+                        const branchNameEl = document.createElement("span");
+                        branchNameEl.innerHTML = RFC.repository.branch!;
+                        branchNameEl.classList.add("mono");
                         branchEl.appendChild(branchNameEl);
 
-                        el.appendChild(branchEl)
+                        el.appendChild(branchEl);
                     }
                 }
             };
@@ -174,17 +168,17 @@ function rfcFirstPageHeader() {
                 if (isNull(value)) continue;
                 console.log("Rendering " + key);
 
-                const rowEl = document.createElement('tr');
+                const rowEl = document.createElement("tr");
 
-                const headerEl = document.createElement('th');
+                const headerEl = document.createElement("th");
                 headerEl.innerHTML = key;
                 rowEl.appendChild(headerEl);
 
-                const valueEl = document.createElement('td');
-                value!!(valueEl);
+                const valueEl = document.createElement("td");
+                value!(valueEl);
                 rowEl.appendChild(valueEl);
 
-                dataTableEl!!.appendChild(rowEl);
+                dataTableEl!.appendChild(rowEl);
             }
         }
     }

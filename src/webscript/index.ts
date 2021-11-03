@@ -1,14 +1,8 @@
-/*
- * SPDX-FileCopyrightText: 2021 Cae Lundin <tecc@tecc.me>
- *
- * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-KDE-Accepted-LGPL
- */
-
 import ts from "typescript";
 import browserify from "browserify";
 import * as path from "@/util/path";
 import { dataFile, isNull } from "@/util";
-import fs, { write } from "fs";
+import fs from "fs";
 import { walkDirectory } from "@/util/fs";
 import Log from "@/log";
 
@@ -53,10 +47,10 @@ export function init(): void {
     };
     webscriptState.compiled = false;
 
-    (webscriptState as any as KRFC.InitialisedWebscriptState).initialised = true;
+    (webscriptState as KRFC.InitialisedWebscriptState).initialised = true;
 }
 
-export function compileFiles(files: string[]) {
+export function compileFiles(files: string[]): void {
     if (!webscriptState.initialised) {
         throw new Error("Initialised");
     }

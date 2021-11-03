@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: 2021 Cae Lundin <tecc@tecc.me>
- *
- * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-KDE-Accepted-LGPL
- */
 import * as tsconfigPaths from "tsconfig-paths";
 import path from "path";
 import pkgdir from "pkg-dir";
@@ -27,8 +22,6 @@ if (tsconfig.resultType === "failed") {
 }
 
 import Log from "@/log";
-import * as render from "@/render";
-import fs from "fs";
 import { declareGlobal, isNull, toDisplayString } from "@/util";
 import arg from "arg";
 import { findAllCommands, loadCommand } from "@/cli/commands";
