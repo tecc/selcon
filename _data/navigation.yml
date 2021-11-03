@@ -1,0 +1,12 @@
+main:
+    - title: "Guide"
+      url: /guide/
+
+docs:
+    - title: "Getting Started"
+      url: /guide/
+      children:
+            - title: "Installation"
+              url: /guide/installation
+            - title: "Usage"
+              urL: /guide/usage

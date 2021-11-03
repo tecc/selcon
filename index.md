@@ -1,3 +1,0 @@
-# Selcon documentation
-
-> TODO

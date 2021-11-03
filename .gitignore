@@ -2,6 +2,7 @@
 node_modules/
 
 # Build outputs
+_site
 rfcs/*/*.html
 !rfcs/*/*.in.html
 .selcon/
