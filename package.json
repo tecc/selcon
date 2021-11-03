@@ -1,16 +1,25 @@
 {
-    "name": "request-for-comments",
-    "version": "0.0.0",
-    "main": "render.js",
-    "repository": "https://invent.kde.org/tecc/rfcs",
+    "name": "selcon",
+    "description": "Self-contained markup compiler",
+    "version": "1.0.0",
+    "main": "dist/cli/index.js",
+    "repository": "https://github.com/tecc/selcon",
     "author": "tecc",
     "license": "MIT",
+    "bugs": {
+        "url" : "https://github.com/tecc/selcon/issues",
+        "email" : "tecc@tecc.me"
+    },
+    "browser": false,
+    "bin": "./dist/cli/index.js",
     "scripts": {
         "prestart": "yarn build",
         "start": "node dist/cli/index.js",
         "prebuild": "rm -rf dist",
-        "build": "tsc",
-        "lint": "\"$(yarn bin)/eslint\" src/*"
+        "build": "\"$(yarn bin)/tsc\"",
+        "lint": "\"$(yarn bin)/eslint\" src/*",
+        "prepublish": "yarn lint && yarn build",
+        "preinstall": "yarn build"
     },
     "dependencies": {
         "arg": "^5.0.1",
