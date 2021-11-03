@@ -1,7 +1,7 @@
 import { assignId, getPage, isNull, scrollTo } from "./util";
 import Data from "./data";
 
-declare const RFC: {
+declare const Info: {
     name: string;
     nickname?: string;
     author: {
@@ -14,6 +14,7 @@ declare const RFC: {
         branch?: string;
     };
     type: string;
+    revision?: number;
 };
 
 const INDEX_ID = "index-id";
@@ -104,8 +105,9 @@ function rfcFirstPageHeader() {
     // quickinfo
     {
         const values: Record<string, string> = {
-            "name": isNull(RFC.nickname) ? RFC.name : RFC.nickname!,
-            "type": RFC.type
+            "name": isNull(Info.nickname) ? Info.name : Info.nickname!,
+            "type": Info.type,
+            "revision": (Info.revision && Info.revision.toString()) || ''
         };
         for (const key of Object.keys(values)) {
             const value = values[key];
@@ -125,37 +127,37 @@ function rfcFirstPageHeader() {
             console.error("Data table element is null");
         } else {
             const values: Record<string, HTMLApplier | null> = {
-                "Author": !isNull(RFC.author) ? (el: HTMLElement) => {
-                    if (!RFC.author.name) {
+                "Author": !isNull(Info.author) ? (el: HTMLElement) => {
+                    if (!Info.author.name) {
                         el.innerHTML = "[Undefined]";
                         return;
                     }
 
-                    const type = isNull(RFC.author.link) ? "span" : "a";
+                    const type = isNull(Info.author.link) ? "span" : "a";
                     const nameEl = document.createElement(type);
-                    nameEl.innerHTML = RFC.author.name;
+                    nameEl.innerHTML = Info.author.name;
                     nameEl.classList.add("mono");
                     if (type === "a") {
-                        nameEl.setAttribute("href", RFC.author.link);
+                        nameEl.setAttribute("href", Info.author.link);
                     }
                     el.appendChild(nameEl);
                 } : null,
-                "Formal name": isNull(RFC.nickname) ? null : (el) => {
-                    el.innerHTML = RFC.name;
+                "Formal name": isNull(Info.nickname) ? null : (el) => {
+                    el.innerHTML = Info.name;
                 },
-                "Repository": isNull(RFC.repository) ? null : (el) => {
+                "Repository": isNull(Info.repository) ? null : (el) => {
                     const linkEl = document.createElement("a");
-                    linkEl.setAttribute("href", RFC.repository.link);
+                    linkEl.setAttribute("href", Info.repository.link);
                     linkEl.classList.add("mono");
-                    linkEl.innerHTML = RFC.repository.name;
+                    linkEl.innerHTML = Info.repository.name;
 
                     el.appendChild(linkEl);
-                    if (!isNull(RFC.repository.branch)) {
+                    if (!isNull(Info.repository.branch)) {
                         const branchEl = document.createElement("span");
                         branchEl.innerHTML = "&nbsp;branch&nbsp;";
 
                         const branchNameEl = document.createElement("span");
-                        branchNameEl.innerHTML = RFC.repository.branch!;
+                        branchNameEl.innerHTML = Info.repository.branch!;
                         branchNameEl.classList.add("mono");
                         branchEl.appendChild(branchNameEl);
 

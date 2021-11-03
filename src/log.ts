@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const Log = {
     debug(...params: any[]) {
-        if (rfcOptions.verbose) {
+        if (selconOptions.verbose) {
             console.debug("[DBG]:", ...params);
         }
     },

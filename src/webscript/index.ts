@@ -47,7 +47,7 @@ export function init(): void {
     };
     webscriptState.compiled = false;
 
-    (webscriptState as KRFC.InitialisedWebscriptState).initialised = true;
+    (webscriptState as Selcon.InitialisedWebscriptState).initialised = true;
 }
 
 export function compileFiles(files: string[]): void {
@@ -92,14 +92,14 @@ export function bundleModules(modules: string[]): Promise<void> {
             });
             bundle.require(module);
         }
-        
+
         bundle.bundle((err, data) => {
             Log.debug("Bundled modules");
             if (!isNull(err)) {
                 reject(err);
                 return;
             }
-            
+
             const as = generateAssignScript(modules);
             const total = `${data.toString("utf-8")}\n${as}`;
             fs.writeFile(SCRIPT_OUTPUT, total, "utf-8", (err) => {

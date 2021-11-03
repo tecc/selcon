@@ -1,4 +1,4 @@
-declare interface RFC {
+declare interface Information {
     name: string;
     nickname?: string;
     author: {
@@ -19,7 +19,7 @@ type Or<V extends ((keyof A) & (keyof B)), A, B> =
     ({ [key: V]: boolean }) &
     ({ [key: V]: false } & A) &
     ({ [key: V]: true } & B);
-declare namespace KRFC {
+declare namespace Selcon {
     import typescript from "typescript";
     declare namespace WebscriptState {
         interface Hosts {
@@ -39,9 +39,9 @@ declare namespace KRFC {
     type WebscriptState = Or<"initialised", Partial<InitialisedWebscriptState>, InitialisedWebscriptState>;
 
 
-    export type RfcCommand = "help" | "build";
+    export type CommandName = "help" | "build";
     export interface Options {
-        command: RfcCommand;
+        command: CommandName;
         /**
          * Whether or not debug (DBG) logs should be enabled.
          */
@@ -52,5 +52,5 @@ declare namespace KRFC {
         debug: boolean;
     }
 }
-declare const webscriptState: KRFC.WebscriptState;
-declare const rfcOptions: KRFC.Options;
+declare const webscriptState: Selcon.WebscriptState;
+declare const selconOptions: Selcon.Options;

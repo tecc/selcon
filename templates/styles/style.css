@@ -1,0 +1,100 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #FAFAFA;
+    color: #000;
+    font-family: "Open Sans", sans-serif;
+    font-size: 12pt;
+}
+
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.page {
+    width: 21cm;
+    min-height: 29.7cm;
+    margin: 1cm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.page > * {
+    padding: 1.5cm;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    body > *:not(.page) {
+        display: none;
+    }
+    body > *.page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+}
+a {
+    color: hsl(200, 90%, 25%);
+    text-decoration: none;
+}
+.light th, .light td {
+    color: #fff;
+}
+.light {
+    color: #fff;
+}
+.muted {
+    color: hsl(0, 0%, 20%);
+}
+.light .muted {
+    color: hsl(0, 0%, 80%);
+}
+.light a {
+    color: hsl(200, 90%, 75%);
+}
+.mono, code {
+    font-family: "Roboto Mono", monospace;
+}
+.fst-norm {
+    font-weight: normal;
+    font-style: normal;
+}
+.fst-bold, .fst-norm.fst-bold {
+    font-weight: bold;
+}
+.fst-italic, .fst-norm.fst-italic {
+    font-style: italic;
+}
+h1, h2, h3, h4, h5, h6, .montserrat {
+    font-family: "Montserrat", "Roboto", sans-serif;
+}
+h1, .fs-1 {
+    font-size: 2rem;
+}
+h2, .fs-2 {
+    font-size: 1.8rem;
+}
+h3, .fs-3 {
+    font-size: 1.6rem;
+}
+h4, .fs-4 {
+    font-size: 1.4rem;
+}
+h5, .fs-5 {
+    font-size: 1.2rem;
+}
+h6, .fs-6 {
+    font-size: 1.1rem;
+}

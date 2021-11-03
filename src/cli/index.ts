@@ -27,10 +27,10 @@ import arg from "arg";
 import { findAllCommands, loadCommand } from "@/cli/commands";
 
 declareGlobal<string>("packageDir", pkgdir.sync()!);
-declareGlobal<KRFC.WebscriptState>("webscriptState", {
+declareGlobal<Selcon.WebscriptState>("webscriptState", {
     initialised: false
 });
-declareGlobal<KRFC.Options>("rfcOptions", {
+declareGlobal<Selcon.Options>("selconOptions", {
     debug: true,
     verbose: false,
     command: "help"
@@ -67,7 +67,7 @@ async function cli() {
         return;
     }
 
-    rfcOptions.command = <KRFC.RfcCommand> command;
+    selconOptions.command = <Selcon.CommandName> command;
 
     Log.debug(`Executing command '${command}'`);
     const cmd = await loadCommand(command);
@@ -78,7 +78,7 @@ async function cli() {
     });
     const args = arg(optSpec);
     const verbose = !!args["--verbose"];
-    rfcOptions.verbose = verbose;
+    selconOptions.verbose = verbose;
     await cmd.run(args);
 }
 

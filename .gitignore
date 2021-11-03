@@ -4,7 +4,7 @@ node_modules/
 # Build outputs
 rfcs/*/*.html
 !rfcs/*/*.in.html
-.rfc/
+.selcon/
 dist/
 
 # IDEs & development tools

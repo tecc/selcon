@@ -5,6 +5,7 @@ export const Data = {
     ScrollTo: "scrollTo",
     Preset: "preset",
     Page: "page",
-    Contents: "contents"
+    Contents: "contents",
+    Revision: "revision"
 };
 export default Data;
