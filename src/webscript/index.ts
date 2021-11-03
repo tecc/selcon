@@ -109,7 +109,7 @@ export function bundleModules(modules: string[], options: CompileOptions): Promi
             let complete: Promise<string>;
             if (options.minify) {
                 complete = minify.js(total, {
-                    preservedNames: ['init']
+                    preservedNames: ["init"]
                 });
             } else {
                 complete = (async () => total)();
@@ -123,14 +123,14 @@ export function bundleModules(modules: string[], options: CompileOptions): Promi
                         }
                         resolve();
                     });
-                })
+                });
         });
     });
 }
 
 export const DEFAULT_COMPILE_OPTIONS: CompileOptions = {
     minify: false
-}
+};
 export function compile(optionsPart: Partial<CompileOptions>): Promise<string> {
     const options = Object.assign({}, DEFAULT_COMPILE_OPTIONS, optionsPart);
     init();

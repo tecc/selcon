@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import * as tsconfigPaths from "tsconfig-paths";
 import path from "path";
 import pkgdir from "pkg-dir";

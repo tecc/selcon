@@ -11,6 +11,7 @@
     },
     "browser": {},
     "bin": "./dist/cli/index.js",
+    "private": false,
     "scripts": {
         "prestart": "npm run build",
         "start": "node dist/cli/index.js",
@@ -51,6 +52,7 @@
     "files": [
         "dist/**/*",
         "websrc/**/*",
-        "templates/**/*"
+        "templates/**/*",
+        "cli.sh"
     ]
 }

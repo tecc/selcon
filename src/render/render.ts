@@ -5,7 +5,7 @@ import Log from "@/log";
 import Handlebars from "handlebars";
 import { isNull, toDisplayString, DisplayStringInputType } from "@/util";
 import { walkDirectory } from "@/util/fs";
-import * as minify from '@/util/minify';
+import * as minify from "@/util/minify";
 
 export interface RenderOptions {
     path: string;
@@ -20,7 +20,7 @@ export type RenderContext = Information & {
 export const DEFAULT_RENDER_OPTIONS: RenderOptions = {
     minify: false,
     forceTemplate: false,
-    path: ''
+    path: ""
 };
 export function render(data: string, template: Handlebars.TemplateDelegate<RenderContext>, optionsPart: Partial<RenderOptions>) {
     const options = Object.assign({}, DEFAULT_RENDER_OPTIONS, optionsPart);
@@ -34,10 +34,10 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
     if (m.template) {
         const newTemplate = getTemplate(m.template);
         if (!newTemplate) {
-            Log.warn("Input specifies different template '" + m.template + "', but it does not exist. Using provided template.")
+            Log.warn("Input specifies different template '" + m.template + "', but it does not exist. Using provided template.");
         } else {
             template = newTemplate;
-            Log.debug("Using different template '" + m.template + "' instead of provided.")
+            Log.debug("Using different template '" + m.template + "' instead of provided.");
         }
     }
     const script = `
@@ -131,10 +131,10 @@ export function buildFile(file: string, optionsPart: Partial<BuildOptions> = {})
             completed
                 .then((completed) => {
                     // NOTE(tecc): this is bad, i know, but idc
-                    let parts = file.split(".");
+                    const parts = file.split(".");
                     const extra = parts.slice(0, parts.length - 1);
                     extra.push("out", ...(parts.slice(parts.length - 1)));
-                    const filename = extra.join('.');
+                    const filename = extra.join(".");
 
                     const outputPath = path.resolve(path.dirname(file), `${filename}`);
                     fs.writeFile(outputPath, completed, "utf-8", (err) => {
@@ -153,7 +153,7 @@ export function buildFile(file: string, optionsPart: Partial<BuildOptions> = {})
                     reject(err);
 
                     return;
-                })
+                });
 
             return;
         });
