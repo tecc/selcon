@@ -1,11 +1,14 @@
 import * as fs from "@/util/fs";
+import { walkDirectory } from "@/util/fs";
 import * as path from "@/util/path";
 import fm from "front-matter";
 import Log from "@/log";
 import Handlebars from "handlebars";
-import { isNull, toDisplayString, DisplayStringInputType } from "@/util";
-import { walkDirectory } from "@/util/fs";
+import { DisplayStringInputType, isNull, toDisplayString } from "@/util";
 import * as minify from "@/util/minify";
+import * as preprocessors from '@/render/preprocessors';
+
+const TEMPLATES_DIR = path.resolve(packageDirectory, "templates");
 
 export interface RenderOptions {
     path: string;
@@ -59,13 +62,17 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
                     Log.debug("Paths is null, skipping");
                     return "";
                 }
+                const inputType = ctx.type || "none";
+                const preprocess = ctx.preprocess || "none";
+
                 const paths: string[] = ctx.paths.split(";");
-                const result: string[] = [];
+                // step 1: load all files
+                const inputs: string[] = [];
                 for (const pb of paths) {
                     Log.debug(`Reading contents of file ${pb}`);
                     let p = path.resolve(path.dirname(options.path), pb);
                     if (!fs.existsSync(p)) {
-                        p = path.resolve(packageDirectory, "templates", pb);
+                        p = path.resolve(TEMPLATES_DIR, pb);
                     }
                     if (!fs.existsSync(p)) {
                         Log.error("Tried to include file that does not exist: ", pb);
@@ -78,9 +85,30 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
                         Log.error("Couldn't include file", pb, e);
                         continue;
                     }
-                    result.push(rv);
+                    inputs.push(rv);
                 }
-                return result.join("\n\n");
+                let result = inputs.join("\n\n");
+                // step 2: preprocess if necessary - if the type is none then it'll just do nothing
+                try {
+                    result = preprocessors.preprocessSync(preprocess, result, {
+                        includePaths: [TEMPLATES_DIR]
+                    });
+                } catch (e) {
+                    Log.warn("Couldn't preprocess result", e);
+                }
+                // step 3: transform processed result
+                switch (inputType) {
+                    case "css":
+                        if (options.minify) {
+                            result = minify.css(result);
+                        }
+                        break;
+                    default:
+                        Log.warn(`Unrecognised file type '${inputType}', defaulting to 'none'`);
+                    case "none":
+                        break;
+                }
+                return result;
             },
             "display": (ctx) => {
                 const type: string = ctx.type;
@@ -172,7 +200,7 @@ export function registerTemplate(name: string, content: string) {
 }
 
 export function loadAllTemplates(): void {
-    const templates = walkDirectory(path.resolve(packageDirectory, "templates"), {
+    const templates = walkDirectory(path.resolve(TEMPLATES_DIR), {
         filter: p => path.extname(p) === ".hbs"
     });
     Log.debug("Found templates", templates.join(", "));
