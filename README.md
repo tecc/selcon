@@ -8,6 +8,8 @@ This project is in development.
 
 The master branch `master` is the development branch.
 
+For new features or issue fixes, you should to create a new branch rather than committing directly to master.
+
 ## Licence
 
 Selcon is licensed under the MIT license. See more in [LICENCE.txt](./LICENCE.txt).
