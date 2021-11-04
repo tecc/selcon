@@ -7,7 +7,7 @@ export function toPrintableString(s: (a: string) => string, value: any): string 
     case "string":
         return s(value);
     default:
-        return s(util.inspect(s, {
+        return s(util.inspect(value, {
             colors: true
         }));
     }
