@@ -1,7 +1,7 @@
 {
     "name": "selcon",
     "description": "Self-contained markup compiler",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "repository": "https://github.com/tecc/selcon",
     "author": "tecc",
     "license": "MIT",
