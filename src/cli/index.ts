@@ -1,34 +1,13 @@
 #!/usr/bin/env node
-import * as tsconfigPaths from "tsconfig-paths";
-import path from "path";
 import pkgdir from "pkg-dir";
 import * as luxon from "luxon";
-
-const tsconfig = tsconfigPaths.loadConfig(path.resolve(pkgdir.sync()!, "tsconfig.json"));
-if (tsconfig.resultType === "failed") {
-    console.error("Cannot initialise tsconfig-paths");
-} else {
-    const mappedPathValues: Record<string, string[]> = {};
-    for (const key of Object.keys(tsconfig.paths)) {
-        const value = tsconfig.paths[key];
-        for (const i in value) {
-            value[i] = value[i].replace(/^(\.\/)?src/g, "$1dist");
-        }
-        mappedPathValues[key] = value;
-    }
-    tsconfigPaths.register({
-        baseUrl: tsconfig.baseUrl,
-        paths: mappedPathValues
-    });
-}
-
 import Log from "@/log";
 import { declareGlobal, isNull, toDisplayString } from "@/util";
 import arg from "arg";
 import { CommandArgs, findAllCommands, loadCommand } from "@/cli/commands";
 import options from "@/cli/options";
+import path from "path";
 
-declareGlobal<string>("packageDir", pkgdir.sync()!);
 declareGlobal<Selcon.WebscriptState>("webscriptState", {
     initialised: false
 });
@@ -36,6 +15,7 @@ declareGlobal<Selcon.Options>("selconOptions", {
     verbose: false,
     command: "help"
 });
+declareGlobal<string>("packageDirectory", path.resolve(__dirname, '../..'))
 
 let commands: string[];
 function initialiseCli() {
@@ -43,16 +23,18 @@ function initialiseCli() {
 }
 
 async function cli() {
-    initialiseCli();
-    let argv = process.argv;
-    let argsStart = 1;
-    for (const arg of argv) {
-        if (arg.endsWith(".js")) break;
-        argsStart++;
+    let args: CommandArgs<unknown> = arg(options, {
+        argv: process.argv.slice(2)
+    });
+    const verbose = !!args["--verbose"];
+    if (verbose) {
+        selconOptions.verbose = verbose;
+        Log.debug("Enabling verbose log output");
     }
-    argv = argv.slice(argsStart);
 
-    let command = argv[0];
+    initialiseCli();
+
+    let command = args._[0];
     if (isNull(command)) {
         Log.debug("No command specified, defaulting to help", command);
         command = "help";
@@ -69,12 +51,7 @@ async function cli() {
     const cmd = await loadCommand(command);
     const cmdOptSpec = cmd.options();
     const optSpec = Object.assign<Record<string, never>, arg.Spec, typeof options>({}, cmdOptSpec, options);
-    const args: CommandArgs<unknown> = arg(optSpec);
-    const verbose = !!args["--verbose"];
-    if (verbose) {
-        selconOptions.verbose = verbose;
-        Log.debug("Enabling verbose log output");
-    }
+    args = arg(optSpec);
     args._ = args._.slice(1);
     await cmd.run(args);
 }

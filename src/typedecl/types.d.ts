@@ -14,8 +14,6 @@ declare interface Information {
     type: string;
 }
 
-declare const packageDir: string;
-
 type Or<V extends ((keyof A) & (keyof B)), A, B> =
     ({ [key: V]: boolean }) &
     ({ [key: V]: false } & A) &
@@ -51,3 +49,4 @@ declare namespace Selcon {
 }
 declare const webscriptState: Selcon.WebscriptState;
 declare const selconOptions: Selcon.Options;
+declare const packageDirectory: string;

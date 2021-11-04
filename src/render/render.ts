@@ -65,7 +65,7 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
                     Log.debug(`Reading contents of file ${pb}`);
                     let p = path.resolve(path.dirname(options.path), pb);
                     if (!fs.existsSync(p)) {
-                        p = path.resolve(packageDir, "templates", pb);
+                        p = path.resolve(packageDirectory, "templates", pb);
                     }
                     if (!fs.existsSync(p)) {
                         Log.error("Tried to include file that does not exist: ", pb);
@@ -172,7 +172,7 @@ export function registerTemplate(name: string, content: string) {
 }
 
 export function loadAllTemplates(): void {
-    const templates = walkDirectory(path.resolve(packageDir, "templates"), {
+    const templates = walkDirectory(path.resolve(packageDirectory, "templates"), {
         filter: p => path.extname(p) === ".hbs"
     });
     Log.debug("Found templates", templates.join(", "));

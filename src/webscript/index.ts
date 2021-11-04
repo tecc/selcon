@@ -16,7 +16,7 @@ function dataDir(): string {
 }
 
 function inputDir(): string {
-    const p = path.resolve(packageDir, "websrc");
+    const p = path.resolve(packageDirectory, "websrc");
     if (!fs.existsSync(p)) {
         fs.mkdirSync(p, {recursive: true});
     }
@@ -172,5 +172,3 @@ export function compile(optionsPart: Partial<CompileOptions>): Promise<string> {
         return;
     });
 }
-
-init();

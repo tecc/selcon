@@ -11,12 +11,9 @@
     },
     "browser": {},
     "bin": "./dist/cli/index.js",
-    "private": false,
     "scripts": {
-        "prestart": "npm run build",
-        "start": "node dist/cli/index.js",
-        "prebuild": "rm -rf dist",
-        "build": "tsc",
+        "start": "npm run build && node dist/cli/index.js",
+        "build": "rm -rf ./dist && tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
         "lint": "eslint src/*",
         "test": "npm run lint",
         "prepublish": "npm run test",
@@ -30,10 +27,12 @@
         "handlebars": "^4.7.7",
         "html-minifier-terser": "^6.0.2",
         "luxon": "^2.0.2",
+        "node-gyp": "^8.3.0",
         "pkg-dir": "^5.0.0",
         "synchronized-promise": "^0.3.1",
         "terser": "^5.9.0",
         "tsconfig-paths": "^3.11.0",
+        "tscpaths": "^0.0.9",
         "typescript": "^4.4.3",
         "walk-sync": "^3.0.0"
     },
@@ -53,6 +52,7 @@
         "dist/**/*",
         "websrc/**/*",
         "templates/**/*",
-        "cli.sh"
+        "cli.sh",
+        "tsconfig.json"
     ]
 }

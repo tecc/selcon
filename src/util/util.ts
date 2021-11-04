@@ -1,5 +1,6 @@
 import path from "path";
 import * as luxon from "luxon";
+import { homedir } from "os";
 
 export function isNull(v: unknown): boolean {
     if ((typeof v) === "undefined") {
@@ -31,7 +32,7 @@ export function declareGlobal<T>(name: GlobalKey | string, v: T): void {
 }
 
 export function dataFile(...n: string[]): string {
-    return path.resolve(packageDir, ".selcon", ...n);
+    return path.resolve(homedir(), ".selcon", ...n);
 }
 
 /*export type CallbackRunner<Parameters extends any[]> = (cb: (...params: Parameters) => void) => void;
