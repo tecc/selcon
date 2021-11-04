@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import pkgdir from "pkg-dir";
 import * as luxon from "luxon";
 import Log from "@/log";
 import { declareGlobal, isNull, toDisplayString } from "@/util";
@@ -7,6 +6,9 @@ import arg from "arg";
 import { CommandArgs, findAllCommands, loadCommand } from "@/cli/commands";
 import options from "@/cli/options";
 import path from "path";
+import colours from "colors";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pkg = require("@/../package.json"); // NOTE(tecc): needs to be a var require because otherwise everything goes wonky
 
 declareGlobal<Selcon.WebscriptState>("webscriptState", {
     initialised: false
@@ -15,7 +17,7 @@ declareGlobal<Selcon.Options>("selconOptions", {
     verbose: false,
     command: "help"
 });
-declareGlobal<string>("packageDirectory", path.resolve(__dirname, '../..'))
+declareGlobal<string>("packageDirectory", path.resolve(__dirname, "../.."));
 
 let commands: string[];
 function initialiseCli() {
@@ -23,8 +25,11 @@ function initialiseCli() {
 }
 
 async function cli() {
+    Log.log("", colours.reset.bold, "Selcon version " + pkg.version);
+    const argv = process.argv.slice(2);
     let args: CommandArgs<unknown> = arg(options, {
-        argv: process.argv.slice(2)
+        argv: argv,
+        permissive: true
     });
     const verbose = !!args["--verbose"];
     if (verbose) {
@@ -51,7 +56,9 @@ async function cli() {
     const cmd = await loadCommand(command);
     const cmdOptSpec = cmd.options();
     const optSpec = Object.assign<Record<string, never>, arg.Spec, typeof options>({}, cmdOptSpec, options);
-    args = arg(optSpec);
+    args = arg(optSpec, {
+        argv: argv
+    });
     args._ = args._.slice(1);
     await cmd.run(args);
 }

@@ -1,5 +1,4 @@
 import terser from "terser";
-import sp from "synchronized-promise";
 import { escapeStringRegexp } from "@/util";
 import HTMLMinifier from "html-minifier-terser";
 

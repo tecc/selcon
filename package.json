@@ -22,6 +22,7 @@
     "dependencies": {
         "arg": "^5.0.1",
         "browserify": "^17.0.0",
+        "colors": "^1.4.0",
         "escape-string-regexp": "^5.0.0",
         "front-matter": "^4.0.2",
         "handlebars": "^4.7.7",

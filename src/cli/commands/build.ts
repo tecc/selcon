@@ -3,13 +3,8 @@ import * as fs from "@/util/fs";
 import * as render from "@/render";
 import * as webscript from "@/webscript";
 import Log from "@/log";
-import arg from "arg";
 import { isEmpty, isNull } from "@/util";
 import type { CommandArgs } from "@/cli/commands";
-
-function findInputs(dir: string): string[] {
-    return fs.walkDirectory(dir, {filter: (v) => v.endsWith(".in.html")});
-}
 
 export const options = {
     "--template": (value: string) => { return isEmpty(value) ? "default" : value; },

@@ -1,18 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import colours from "colors";
+import * as util from "util"; // NOTE(tecc): screw american spelling. any commit that changes this is immediately reversed.
+
+export function toPrintableString(s: (a: string) => string, value: any): string {
+    switch (typeof value) {
+    case "string":
+        return s(value);
+    default:
+        return s(util.inspect(s, {
+            colors: true
+        }));
+    }
+}
+
 export const Log = {
+    log(prefix: string, col: (a: string) => string = colours.reset, ...params: any[]) {
+        const space = col(" ");
+        process.stdout.write(prefix);
+        for (const param of params) {
+            process.stdout.write(toPrintableString(col, param) + space);
+        }
+        process.stdout.write("\n");
+    },
     debug(...params: any[]) {
         if (selconOptions.verbose) {
-            console.debug("[DBG]:", ...params);
+            this.log(colours.gray.italic("[DBG]: "), colours.gray.italic, ...params);
         }
     },
     info(...params: any[]) {
-        console.log("[INF]:", ...params);
+        this.log(colours.reset("[INF]: "), colours.reset, ...params);
     },
     error(...params: any[]) {
-        console.error("[ERR]:", ...params);
+        this.log(colours.black.bgRed("[ERR]:") + " ", colours.red, ...params);
     },
     warn(...params: any[]) {
-        console.warn("[WRN]:", ...params);
+        this.log(colours.yellow.bold("[WRN]: "), colours.yellow, ...params);
     }
 };
 

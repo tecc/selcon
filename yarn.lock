@@ -1135,6 +1135,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"colors@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "colors@npm:1.4.0"
+  checksum: 98aa2c2418ad87dedf25d781be69dc5fc5908e279d9d30c34d8b702e586a0474605b3a189511482b9d5ed0d20c867515d22749537f7bc546256c6014f3ebdcec
+  languageName: node
+  linkType: hard
+
 "combine-source-map@npm:^0.8.0, combine-source-map@npm:~0.8.0":
   version: 0.8.0
   resolution: "combine-source-map@npm:0.8.0"
@@ -4044,6 +4051,7 @@ __metadata:
     "@typescript-eslint/parser": ^4.31.1
     arg: ^5.0.1
     browserify: ^17.0.0
+    colors: ^1.4.0
     escape-string-regexp: ^5.0.0
     eslint: ^7.32.0
     front-matter: ^4.0.2
