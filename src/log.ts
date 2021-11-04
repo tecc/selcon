@@ -28,13 +28,17 @@ export const Log = {
         }
     },
     info(...params: any[]) {
-        this.log(colours.reset("[INF]: "), colours.reset, ...params);
+        if (!selconOptions.silent) {
+            this.log(colours.reset("[INF]: "), colours.reset, ...params);
+        }
+    },
+    warn(...params: any[]) {
+        if (!selconOptions.silent) {
+            this.log(colours.yellow.bold("[WRN]: "), colours.yellow, ...params);
+        }
     },
     error(...params: any[]) {
         this.log(colours.black.bgRed("[ERR]:") + " ", colours.red, ...params);
-    },
-    warn(...params: any[]) {
-        this.log(colours.yellow.bold("[WRN]: "), colours.yellow, ...params);
     }
 };
 
