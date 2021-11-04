@@ -1,10 +1,10 @@
 import * as path from "@/util/path";
-import * as fs from "@/util/fs";
 import * as render from "@/render";
 import * as webscript from "@/webscript";
 import Log from "@/log";
 import { isEmpty, isNull } from "@/util";
 import type { CommandArgs } from "@/cli/commands";
+import { opts } from "@/cli/options";
 
 export const options = {
     "--template": (value: string) => { return isEmpty(value) ? "default" : value; },
@@ -20,8 +20,8 @@ export async function run(args: CommandArgs<typeof options>): Promise<void> {
         return;
     }
     paths = paths.map((v) => path.resolve(process.cwd(), v));
-    const template = args["--template"] || "default";
-    const minify = (!isNull(args["--minify"]) && args["--minify"]) || false;
+    const template = opts.or(args["--template"], "default");
+    const minify = opts.or(args["--minify"], false);
 
     if (minify) {
         Log.warn("Minify is an experimental feature.");
@@ -34,7 +34,7 @@ export async function run(args: CommandArgs<typeof options>): Promise<void> {
     }
 
     const script = await webscript.compile({
-        minify: args["--minify"]
+        minify: minify
     });
     render.setScript(script);
 
