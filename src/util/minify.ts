@@ -44,26 +44,31 @@ export async function js(input: string, optionsPart: Partial<JSMinifyOptions> = 
     return minified("JS", input, result.code);
 }
 
-// TODO: Options
 export interface HTMLMinifyOptions {
-
+    conservative: boolean;
+    extremes: boolean;
 }
-export const DEFAULT_HTML_OPTIONS: HTMLMinifyOptions = {};
+export const DEFAULT_HTML_OPTIONS: HTMLMinifyOptions = {
+    conservative: false,
+    extremes: false
+};
 export async function html(code: string, optionsPart: Partial<HTMLMinifyOptions> = {}): Promise<string> {
     const options: HTMLMinifyOptions = Object.assign({}, DEFAULT_HTML_OPTIONS, optionsPart);
     const result = await HTMLMinifier.minify(code, {
         minifyCSS: false,
-        minifyJS: false,
-        minifyURLs: false,
+        minifyJS: false, // minifyCSS & minifyJS are intentionally left off because that's handled elsewhere
+        minifyURLs: options.extremes,
         html5: true,
-        preserveLineBreaks: false,
-        removeComments: true,
+        preserveLineBreaks: options.conservative,
+        removeComments: !options.conservative,
         collapseWhitespace: true,
         collapseInlineTagWhitespace: true,
         caseSensitive: true,
-        conservativeCollapse: false,
-        removeOptionalTags: true,
-        keepClosingSlash: true
+        conservativeCollapse: options.conservative,
+        removeOptionalTags: !options.conservative,
+        keepClosingSlash: true,
+        removeAttributeQuotes: options.extremes,
+        useShortDoctype: options.extremes
     });
     return minified("HTML", code, result);
 }
