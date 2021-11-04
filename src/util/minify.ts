@@ -61,7 +61,7 @@ export async function html(code: string, optionsPart: Partial<HTMLMinifyOptions>
         collapseWhitespace: true,
         collapseInlineTagWhitespace: true,
         caseSensitive: true,
-        conservativeCollapse: true,
+        conservativeCollapse: false,
         removeOptionalTags: true,
         keepClosingSlash: true
     });
