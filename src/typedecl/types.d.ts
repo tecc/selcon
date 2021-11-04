@@ -45,6 +45,7 @@ declare namespace Selcon {
          * Whether or not debug (DBG) logs should be enabled.
          */
         verbose: boolean;
+        silent: boolean;
     }
 }
 declare const webscriptState: Selcon.WebscriptState;

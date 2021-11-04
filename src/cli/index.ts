@@ -15,6 +15,7 @@ declareGlobal<Selcon.WebscriptState>("webscriptState", {
 });
 declareGlobal<Selcon.Options>("selconOptions", {
     verbose: false,
+    silent: false,
     command: "help"
 });
 declareGlobal<string>("packageDirectory", path.resolve(__dirname, "../.."));
@@ -25,17 +26,24 @@ function initialiseCli() {
 }
 
 async function cli() {
-    Log.log("", colours.reset.bold, "Selcon version " + pkg.version);
     const argv = process.argv.slice(2);
     let args: CommandArgs<unknown> = arg(options, {
         argv: argv,
         permissive: true
     });
     const verbose = !!args["--verbose"];
+    const silent = !!args["--silent"] && !verbose;
     if (verbose) {
         selconOptions.verbose = verbose;
         Log.debug("Enabling verbose log output");
     }
+    if (silent) {
+        selconOptions.silent = silent;
+        // NOTE(tecc): would've been a good idea to put a debug log here, except that won't get printed because silent.
+    } else {
+        Log.log("", colours.reset.bold, "Selcon version " + pkg.version);
+    }
+
 
     initialiseCli();
 
