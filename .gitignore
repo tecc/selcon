@@ -1,6 +1,7 @@
-# Node
+# Node-related
 node_modules/
 .yarn/
+package.tgz
 
 # Build outputs
 *.out.*
