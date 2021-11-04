@@ -4,6 +4,8 @@
 
 This project is in development.
 
+Documentation can be found [here](https://docs.tecc.me/selcon).
+
 ## Branches
 
 The master branch `master` is the development branch.
