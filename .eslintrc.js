@@ -34,6 +34,7 @@ module.exports = {
             "always"
         ],
         "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off"
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "no-fallthrough": "off"
     }
 };
