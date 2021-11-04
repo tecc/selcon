@@ -35,7 +35,7 @@ export function preprocess(type: string, input: string, optionsPart: Partial<Pre
     if (isNull(preprocessor)) {
         return Promise.reject(`Preprocessor '${type}' does not exist.`);
     }
-    Log.debug(`Using '${type}' preprocessor`)
+    Log.debug(`Using '${type}' preprocessor`);
     return preprocessor(input, options);
 }
 export const preprocessSync = sp(preprocess);

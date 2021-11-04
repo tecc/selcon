@@ -10,16 +10,16 @@ export function preprocess(indented: boolean, input: string, options: Preprocess
             data: input
         }, (err, res) => {
             if (err) {
-                Log.error('Error whilst preprocessing using Sass', err);
+                Log.error("Error whilst preprocessing using Sass", err);
                 reject(err);
                 return;
             }
-            resolve(res.css.toString('utf-8'));
-        })
+            resolve(res.css.toString("utf-8"));
+        });
     });
 }
 export function sass(input: string, options: PreprocessRenderOptions): Promise<string> {
-    return preprocess(true, input, options)
+    return preprocess(true, input, options);
 }
 export function scss(input: string, options: PreprocessRenderOptions): Promise<string> {
     return preprocess(false, input, options);

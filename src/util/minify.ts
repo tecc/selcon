@@ -11,7 +11,7 @@ function minified(type: string, input: string, output?: string): string {
     }
     const sizeFactor = (output.length / input.length) * 100;
     if (output.length > input.length) {
-        Log.warn(`Minify output length (${output.length}) greater than input length (${input.length}) (${sizeFactor}% of original size), returning input`)
+        Log.warn(`Minify output length (${output.length}) greater than input length (${input.length}) (${sizeFactor}% of original size), returning input`);
         return input;
     } else {
         Log.debug(`Minified ${type} from`, input.length, "to", output.length, "(" + sizeFactor + "% of original size)");

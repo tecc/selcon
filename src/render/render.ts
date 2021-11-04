@@ -6,7 +6,7 @@ import Log from "@/log";
 import Handlebars from "handlebars";
 import { DisplayStringInputType, isNull, toDisplayString } from "@/util";
 import * as minify from "@/util/minify";
-import * as preprocessors from '@/render/preprocessors';
+import * as preprocessors from "@/render/preprocessors";
 
 const TEMPLATES_DIR = path.resolve(packageDirectory, "templates");
 
@@ -98,15 +98,15 @@ export function render(data: string, template: Handlebars.TemplateDelegate<Rende
                 }
                 // step 3: transform processed result
                 switch (inputType) {
-                    case "css":
-                        if (options.minify) {
-                            result = minify.css(result);
-                        }
-                        break;
-                    default:
-                        Log.warn(`Unrecognised file type '${inputType}', defaulting to 'none'`);
-                    case "none":
-                        break;
+                case "css":
+                    if (options.minify) {
+                        result = minify.css(result);
+                    }
+                    break;
+                default:
+                    Log.warn(`Unrecognised file type '${inputType}', defaulting to 'none'`);
+                case "none":
+                    break;
                 }
                 return result;
             },
